@@ -101,6 +101,15 @@
         let command = args.shift().substring(1).trim();
 
         beyond_caller = getObj('player', msg.playerid);
+        if (beyond_caller === "API") {
+            beyond_caller = findObjs({
+                _type: "player",
+                _displayname: msg.who
+            })[0];
+        }
+        if (!beyond_caller) {
+            return;
+        }
 
         if (command !== 'beyond') {
             return;
@@ -172,9 +181,19 @@
         if(importData === '') {
             return;
         }
-        
+
+        beyondRunImport(msg, importData);
+    });
+
+    const beyondRunImport = (msg, importData) => {
         let json = importData;
         let character = JSON.parse(json).character;
+
+        beyond_caller = getObj('player', msg.playerid);
+
+        let config = state[state_name][beyond_caller.id].config;
+        let initTiebreaker = config.initTieBreaker;
+        let languageGrouping = config.languageGrouping;
 
         sendChat(script_name, '<div style="'+style+'">Import of <b>' + character.name + '</b> is starting.</div>', null, {noarchive:true});
 
@@ -1041,7 +1060,7 @@
         // make work queue
         let items = createSingleWriteQueue(single_attributes);
         processItem(character, items, single_attributes, repeating_attributes, total_level)
-    });
+    };
 
     const calculateInitiativeStyle = (character) => {
         let init_mods = getObjects(character.modifiers, 'subType', 'initiative');
