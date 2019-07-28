@@ -23,7 +23,7 @@
  * Roll20: https://app.roll20.net/users/2990964/ammo
  */
 
-(function() {
+var BeyondImporter = (function() {
     const _ABILITIES = {1:'STR',2:'DEX',3:'CON',4:'INT',5:'WIS',6:'CHA'};
     const _ABILITY = {'STR': 'strength', 'DEX': 'dexterity', 'CON': 'constitution', 'INT': 'intelligence', 'WIS': 'wisdom', 'CHA': 'charisma'}
     const abilities = ['STR','DEX','CON','INT','WIS','CHA'];
@@ -185,7 +185,7 @@
         beyondRunImport(msg, importData);
     });
 
-    const beyondRunImport = (msg, importData) => {
+    const runImport = (msg, importData) => {
         let json = importData;
         let character = JSON.parse(json).character;
 
@@ -2137,5 +2137,9 @@
             }
             // XXX implement passive-perception bonus ('passiveperceptionmod') etc.
         }
-    }; 
+    };
+
+    return {
+        import: runImport
+    };
 })();
